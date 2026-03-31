@@ -11,7 +11,7 @@ export const categories = [
  
 ];
 
-export const products = [
+const baseProducts = [
   {
     id: 1,
     name: 'SAMSUNG Galaxy S21',
@@ -269,5 +269,21 @@ export const products = [
   }
 
 ];
+
+const updateProductSalePrice = (items, productName, salePrice) =>
+  items.map((product) =>
+    product.name === productName
+      ? {
+          ...product,
+          price: salePrice,
+        }
+      : product
+  );
+
+export const products = updateProductSalePrice(
+  baseProducts,
+  'SAMSUNG Galaxy S21',
+  70000
+);
 
 export default products;
