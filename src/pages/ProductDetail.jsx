@@ -10,6 +10,7 @@ const ProductDetail = ({ addToCart }) => {
   const product = products.find(p => p.id === parseInt(id));
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const [quantity, setQuantity] = useState(1);
   const imageRef = useRef(null);
   
   if (!product) {
@@ -39,6 +40,18 @@ const ProductDetail = ({ addToCart }) => {
 
   const handleMouseLeave = () => {
     setIsZoomed(false);
+  };
+
+  const incrementQuantity = () => {
+    setQuantity(currentQuantity => currentQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    setQuantity(currentQuantity => Math.max(1, currentQuantity - 1));
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
   };
 
   // Find related products (same category, excluding current product)
@@ -135,14 +148,37 @@ const ProductDetail = ({ addToCart }) => {
             </ul>
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
+            <div className="flex items-center rounded-lg border border-gray-300 bg-white">
+              <button
+                type="button"
+                onClick={decrementQuantity}
+                className="px-4 py-3 text-xl font-semibold text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300"
+                disabled={quantity <= 1}
+                aria-label="Decrease quantity"
+              >
+                -
+              </button>
+              <span className="min-w-16 px-4 text-center text-lg font-semibold text-black">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={incrementQuantity}
+                className="px-4 py-3 text-xl font-semibold text-gray-700 transition-colors hover:bg-gray-100"
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+            </div>
             <button 
-              onClick={() => addToCart(product)}
+              type="button"
+              onClick={handleAddToCart}
               className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center"
             >
               <FaShoppingCart className="mr-2" /> Add to Cart
             </button>
-            <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-black">
+            <button type="button" className="p-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-black">
               <FaHeart />
             </button>
           </div>
