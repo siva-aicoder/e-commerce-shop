@@ -1,5 +1,5 @@
 // pages/Products.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { FaFilter, FaTimes } from 'react-icons/fa';
@@ -9,53 +9,93 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState(category ? [category] : []);
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [sortBy, setSortBy] = useState('featured');
-  
   const productsPerPage = 12;
 
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    let result = products;
-    
+  const productsMatchingBaseFilters = useMemo(() => {
+    let result = [...products];
+
     // Filter by search term
     if (searchTerm) {
-      result = result.filter(product => 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      const normalizedSearchTerm = searchTerm.toLowerCase();
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(normalizedSearchTerm) ||
+        product.description.toLowerCase().includes(normalizedSearchTerm)
       );
     }
-    
+
     // Filter by category
     if (selectedCategories.length > 0) {
-      result = result.filter(product => 
+      result = result.filter(product =>
         selectedCategories.includes(product.category)
       );
     }
-    
+
+    return result;
+  }, [products, searchTerm, selectedCategories]);
+
+  const [minimumAvailablePrice, maximumAvailablePrice] = useMemo(() => {
+    if (productsMatchingBaseFilters.length === 0) {
+      return [0, 0];
+    }
+
+    const prices = productsMatchingBaseFilters.map((product) => product.price);
+    return [Math.min(...prices), Math.max(...prices)];
+  }, [productsMatchingBaseFilters]);
+
+  const [priceRange, setPriceRange] = useState([minimumAvailablePrice, maximumAvailablePrice]);
+
+  useEffect(() => {
+    setSelectedCategories(category ? [category] : []);
+  }, [category]);
+
+  useEffect(() => {
+    setPriceRange((currentRange) => {
+      const nextMinimum = Math.max(currentRange[0], minimumAvailablePrice);
+      const nextMaximum = Math.min(currentRange[1], maximumAvailablePrice);
+      const normalizedRange = [
+        Math.min(nextMinimum, nextMaximum),
+        Math.max(nextMinimum, nextMaximum),
+      ];
+
+      if (
+        normalizedRange[0] === currentRange[0] &&
+        normalizedRange[1] === currentRange[1]
+      ) {
+        return currentRange;
+      }
+
+      return normalizedRange;
+    });
+  }, [minimumAvailablePrice, maximumAvailablePrice]);
+
+  // Filter and sort products
+  const filteredProducts = useMemo(() => {
+    const result = [...productsMatchingBaseFilters];
+
     // Filter by price range
-    result = result.filter(product => 
+    const priceFilteredProducts = result.filter(product =>
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
-    
+
     // Sort products
-    switch(sortBy) {
+    switch (sortBy) {
       case 'priceLow':
-        result.sort((a, b) => a.price - b.price);
+        priceFilteredProducts.sort((a, b) => a.price - b.price);
         break;
       case 'priceHigh':
-        result.sort((a, b) => b.price - a.price);
+        priceFilteredProducts.sort((a, b) => b.price - a.price);
         break;
       case 'rating':
-        result.sort((a, b) => b.rating - a.rating);
+        priceFilteredProducts.sort((a, b) => b.rating - a.rating);
         break;
       default:
         // Default sorting (featured)
         break;
     }
-    
-    return result;
-  }, [products, searchTerm, selectedCategories, priceRange, sortBy]);
+
+    return priceFilteredProducts;
+  }, [priceRange, productsMatchingBaseFilters, sortBy]);
 
   // Get current products for pagination
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -75,9 +115,23 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
 
   // Handle price range filter
   const handlePriceRangeChange = (e, index) => {
-    const newPriceRange = [...priceRange];
-    newPriceRange[index] = parseInt(e.target.value);
-    setPriceRange(newPriceRange);
+    const nextValue = Number.parseInt(e.target.value, 10);
+
+    setPriceRange((currentRange) => {
+      if (index === 0) {
+        return [Math.min(nextValue, currentRange[1]), currentRange[1]];
+      }
+
+      return [currentRange[0], Math.max(nextValue, currentRange[0])];
+    });
+
+    setCurrentPage(1);
+  };
+
+  const resetFilters = () => {
+    setSelectedCategories(category ? [category] : []);
+    setPriceRange([minimumAvailablePrice, maximumAvailablePrice]);
+    setSortBy('featured');
     setCurrentPage(1);
   };
 
@@ -133,19 +187,21 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             </div>
             <input
               type="range"
-              min="0"
-              max="1000"
+              min={minimumAvailablePrice}
+              max={maximumAvailablePrice}
               value={priceRange[0]}
               onChange={(e) => handlePriceRangeChange(e, 0)}
               className="w-full accent-black"
+              disabled={minimumAvailablePrice === maximumAvailablePrice}
             />
             <input
               type="range"
-              min="0"
-              max="1000"
+              min={minimumAvailablePrice}
+              max={maximumAvailablePrice}
               value={priceRange[1]}
               onChange={(e) => handlePriceRangeChange(e, 1)}
               className="w-full accent-black"
+              disabled={minimumAvailablePrice === maximumAvailablePrice}
             />
           </div>
         </div>
@@ -167,11 +223,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
         
         {/* Clear Filters Button */}
         <button 
-          onClick={() => {
-            setSelectedCategories(category ? [category] : []);
-            setPriceRange([0, 1000]);
-            setSortBy('featured');
-          }}
+          onClick={resetFilters}
           className="w-full mt-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           Clear Filters
@@ -245,11 +297,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <h3 className="text-xl font-semibold text-black">No products found</h3>
             <p className="text-gray-500">Try adjusting your filters or search term</p>
             <button 
-              onClick={() => {
-                setSelectedCategories(category ? [category] : []);
-                setPriceRange([0, 1000]);
-                setSortBy('featured');
-              }}
+              onClick={resetFilters}
               className="mt-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
               Clear All Filters
