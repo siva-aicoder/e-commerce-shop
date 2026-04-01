@@ -1,22 +1,30 @@
 // pages/Products.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { FaFilter, FaTimes } from 'react-icons/fa';
+import { normalizeCategoryName } from '../utils';
 
 const Products = ({ products, categories, searchTerm, addToCart }) => {
   const { category } = useParams();
+  const normalizedCategory = normalizeCategoryName(category);
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState(category ? [category] : []);
+  const [selectedCategories, setSelectedCategories] = useState(
+    normalizedCategory ? [normalizedCategory] : []
+  );
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [sortBy, setSortBy] = useState('featured');
   
+  useEffect(() => {
+    setSelectedCategories(normalizedCategory ? [normalizedCategory] : []);
+  }, [normalizedCategory]);
+
   const productsPerPage = 12;
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let result = products;
+    let result = [...products];
     
     // Filter by search term
     if (searchTerm) {
@@ -29,7 +37,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
     // Filter by category
     if (selectedCategories.length > 0) {
       result = result.filter(product => 
-        selectedCategories.includes(product.category)
+        selectedCategories.includes(normalizeCategoryName(product.category))
       );
     }
     
@@ -76,7 +84,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
   // Handle price range filter
   const handlePriceRangeChange = (e, index) => {
     const newPriceRange = [...priceRange];
-    newPriceRange[index] = parseInt(e.target.value);
+    newPriceRange[index] = parseInt(e.target.value, 10);
     setPriceRange(newPriceRange);
     setCurrentPage(1);
   };
@@ -168,7 +176,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
         {/* Clear Filters Button */}
         <button 
           onClick={() => {
-            setSelectedCategories(category ? [category] : []);
+            setSelectedCategories(normalizedCategory ? [normalizedCategory] : []);
             setPriceRange([0, 1000]);
             setSortBy('featured');
           }}
@@ -182,7 +190,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
       <div className="md:w-3/4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-black">
-            {category ? `${category} Products` : 'All Products'}
+            {normalizedCategory ? `${normalizedCategory} Products` : 'All Products'}
             <span className="text-gray-500 text-lg ml-2">({filteredProducts.length} products)</span>
           </h2>
           <button 
@@ -246,7 +254,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <p className="text-gray-500">Try adjusting your filters or search term</p>
             <button 
               onClick={() => {
-                setSelectedCategories(category ? [category] : []);
+                setSelectedCategories(normalizedCategory ? [normalizedCategory] : []);
                 setPriceRange([0, 1000]);
                 setSortBy('featured');
               }}
