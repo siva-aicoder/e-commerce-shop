@@ -2,15 +2,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
+import heroFashion from '../assets/hero-fashion.svg';
 
 const Home = ({ categories, featuredProducts }) => {
   return (
     <div className="space-y-12 bg-gray-50 py-8">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-black to-gray-800 text-white rounded-lg p-8 md:p-12 mx-4">
-        <div className="max-w-2xl">
+      <section
+        className="relative overflow-hidden rounded-lg mx-4"
+        style={{
+          backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.68) 42%, rgba(15, 23, 42, 0.38) 100%), url(${heroFashion})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" aria-hidden="true" />
+        <div className="relative max-w-2xl p-8 md:p-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Elevate Your Style</h1>
-          <p className="text-lg mb-6">Discover the latest trends and exclusive collections</p>
+          <p className="text-lg mb-6 text-gray-100">Discover the latest trends and exclusive collections</p>
           <Link 
             to="/products" 
             className="inline-flex items-center bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
