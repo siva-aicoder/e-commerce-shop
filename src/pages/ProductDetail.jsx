@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaHeart, FaShoppingCart, FaArrowLeft } from 'react-icons/fa';
-import products from '../data/mockData';
+import { products } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
 
 const ProductDetail = ({ addToCart }) => {
