@@ -7,7 +7,7 @@ export const categories = [
   { id: 4, name: 'Books', icon: '📚', productCount: 2},
   { id: 5, name: 'Beauty', icon: '💄', productCount: 1},
   { id: 6, name: 'Sports', icon: '⚽', productCount: 2},
-  { id: 7, name: 'Toys', icon: '🧸', productCount: 2 },
+  { id: 7, name: 'Kids', icon: '🧸', productCount: 2 },
  
 ];
 
@@ -136,7 +136,7 @@ export const products = [
     name: 'Building Blocks Set',
     price: 499,
     oldPrice: 999,
-    category: 'Toys',
+    category: 'Kids',
     rating: 4.9,
     reviewCount: 231,
     image: 'https://m.media-amazon.com/images/I/81D9vyIHXbL.jpg',
@@ -153,7 +153,7 @@ export const products = [
     name: 'Car Toy',
     price: 2999,
     oldPrice: 3999,
-    category: 'Toys',
+    category: 'Kids',
     rating: 4.5,
     reviewCount: 76,
     image: 'https://coolwallpapers.me/picsup/3032183-toy-car_volkswagen_volkswagen-beetle.jpg',
