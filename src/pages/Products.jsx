@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { FaFilter, FaTimes } from 'react-icons/fa';
+import { getSalePrice } from '../utils';
 
 const Products = ({ products, categories, searchTerm, addToCart }) => {
   const { category } = useParams();
@@ -35,16 +36,16 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
     
     // Filter by price range
     result = result.filter(product => 
-      product.price >= priceRange[0] && product.price <= priceRange[1]
+      getSalePrice(product) >= priceRange[0] && getSalePrice(product) <= priceRange[1]
     );
     
     // Sort products
     switch(sortBy) {
       case 'priceLow':
-        result.sort((a, b) => a.price - b.price);
+        result.sort((a, b) => getSalePrice(a) - getSalePrice(b));
         break;
       case 'priceHigh':
-        result.sort((a, b) => b.price - a.price);
+        result.sort((a, b) => getSalePrice(b) - getSalePrice(a));
         break;
       case 'rating':
         result.sort((a, b) => b.rating - a.rating);

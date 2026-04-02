@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar, FaHeart, FaShoppingCart } from 'react-icons/fa';
+import { getBasePrice, getSalePrice, hasDiscount } from '../utils';
 
 const ProductCard = ({ product, addToCart }) => {
+  const salePrice = getSalePrice(product);
+  const basePrice = getBasePrice(product);
+
   const handleAddToCart = (e) => {
     e.preventDefault(); // Prevent navigation to product detail
     e.stopPropagation(); // Stop event propagation
@@ -39,9 +43,9 @@ const ProductCard = ({ product, addToCart }) => {
         </div>
         
         <div className="flex justify-between items-center mb-3">
-          <span className="text-lg font-bold text-black">₹{product.price.toLocaleString('en-IN')}</span>
-          {product.oldPrice && (
-            <span className="text-sm text-gray-500 line-through">₹{product.oldPrice.toLocaleString('en-IN')}</span>
+          <span className="text-lg font-bold text-black">₹{salePrice.toLocaleString('en-IN')}</span>
+          {hasDiscount(product) && (
+            <span className="text-sm text-gray-500 line-through">₹{basePrice.toLocaleString('en-IN')}</span>
           )}
         </div>
         

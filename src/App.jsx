@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaShoppingCart, FaSearch, FaStar, FaHome, FaShoppingBag, FaUser, FaHeart } from 'react-icons/fa';
 
 // Components
 import Header from './components/Header';
@@ -12,6 +11,7 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import { getSalePrice } from './utils';
 
 // Mock data
 import { categories, products } from './data/mockData';
@@ -34,6 +34,7 @@ function App() {
   }, [cart]);
 
   const addToCart = (product) => {
+    const cartProduct = { ...product, price: getSalePrice(product) };
     const existingItem = cart.find(item => item.id === product.id);
     
     if (existingItem) {
@@ -43,7 +44,7 @@ function App() {
           : item
       ));
     } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+      setCart([...cart, { ...cartProduct, quantity: 1 }]);
     }
     
     toast.success('Product added to cart!', {

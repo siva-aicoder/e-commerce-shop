@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
+import { getBasePrice, getSalePrice, hasDiscount } from '../utils';
 
 const Home = ({ categories, featuredProducts }) => {
   return (
@@ -61,7 +62,11 @@ const Home = ({ categories, featuredProducts }) => {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {featuredProducts.map(product => (
+          {featuredProducts.map(product => {
+            const salePrice = getSalePrice(product);
+            const basePrice = getBasePrice(product);
+
+            return (
             <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow border border-gray-200">
               <Link to={`/product/${product.id}`}>
                 <div className="h-48 bg-gray-100 flex items-center justify-center">
@@ -80,15 +85,16 @@ const Home = ({ categories, featuredProducts }) => {
                     <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-black">₹{product.price}</span>
-                    {product.oldPrice && (
-                      <span className="text-sm text-gray-500 line-through">₹{product.oldPrice}</span>
+                    <span className="text-lg font-bold text-black">₹{salePrice}</span>
+                    {hasDiscount(product) && (
+                      <span className="text-sm text-gray-500 line-through">₹{basePrice}</span>
                     )}
                   </div>
                 </div>
               </Link>
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
