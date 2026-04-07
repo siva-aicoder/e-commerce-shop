@@ -1,7 +1,6 @@
-// components/Header.jsx (updated)
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaSearch, FaHome, FaShoppingBag, FaUser, FaHeart, FaTimes, FaEdit, FaSignOutAlt, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHistory } from 'react-icons/fa';
+import { FaShoppingCart, FaSearch, FaHome, FaShoppingBag, FaUser, FaHeart, FaTimes, FaEdit, FaSignOutAlt, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +27,7 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 mb-4 md:mb-0">
               <FaShoppingBag className="text-2xl text-white" />
-              <span className="text-xl font-bold">STYLE.COM</span>
+              <span className="text-xl font-bold">SHOPPERS-STOP</span>
             </Link>
 
             {/* Search Bar */}

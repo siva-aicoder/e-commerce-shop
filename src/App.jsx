@@ -1,9 +1,7 @@
-// App.jsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaShoppingCart, FaSearch, FaStar, FaHome, FaShoppingBag, FaUser, FaHeart } from 'react-icons/fa';
 
 // Components
 import Header from './components/Header';
@@ -19,6 +17,10 @@ import { categories, products } from './data/mockData';
 function App() {
   const [cart, setCart] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    document.title = 'SHOPPERS-STOP';
+  }, []);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
@@ -117,7 +119,7 @@ function App() {
                   products={products}
                   categories={categories}
                   searchTerm={searchTerm}
-                  addToCart={addToCart} // ← This was missing!
+                  addToCart={addToCart}
                 />
               } 
             />
