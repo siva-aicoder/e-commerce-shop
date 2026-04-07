@@ -1,11 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaStar, FaHeart, FaShoppingCart } from 'react-icons/fa';
+import { formatInrPrice } from '../utils';
 
 const ProductCard = ({ product, addToCart }) => {
   const handleAddToCart = (e) => {
-    e.preventDefault(); // Prevent navigation to product detail
-    e.stopPropagation(); // Stop event propagation
+    e.preventDefault();
+    e.stopPropagation();
     addToCart(product);
   };
 
@@ -39,9 +39,9 @@ const ProductCard = ({ product, addToCart }) => {
         </div>
         
         <div className="flex justify-between items-center mb-3">
-          <span className="text-lg font-bold text-black">₹{product.price.toLocaleString('en-IN')}</span>
+          <span className="text-lg font-bold text-black">{formatInrPrice(product.price)}</span>
           {product.oldPrice && (
-            <span className="text-sm text-gray-500 line-through">₹{product.oldPrice.toLocaleString('en-IN')}</span>
+            <span className="text-sm text-gray-500 line-through">{formatInrPrice(product.oldPrice)}</span>
           )}
         </div>
         

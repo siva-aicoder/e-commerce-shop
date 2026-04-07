@@ -1,11 +1,8 @@
-// App.jsx
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaShoppingCart, FaSearch, FaStar, FaHome, FaShoppingBag, FaUser, FaHeart } from 'react-icons/fa';
 
-// Components
 import Header from './components/Header';
 import Home from './pages/Home';
 import Products from './pages/Products';
@@ -20,34 +17,38 @@ function App() {
   const [cart, setCart] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Load cart from localStorage on initial render
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      try {
+        setCart(JSON.parse(savedCart));
+      } catch {
+        localStorage.removeItem('cart');
+      }
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product) => {
-    const existingItem = cart.find(item => item.id === product.id);
-    
-    if (existingItem) {
-      setCart(cart.map(item => 
-        item.id === product.id 
-          ? { ...item, quantity: item.quantity + 1 } 
-          : item
-      ));
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-    
+    setCart((currentCart) => {
+      const existingItem = currentCart.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        return currentCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+
+      return [...currentCart, { ...product, quantity: 1 }];
+    });
+
     toast.success('Product added to cart!', {
-      position: "bottom-right",
+      position: 'bottom-right',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -57,9 +58,9 @@ function App() {
   };
 
   const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
+    setCart((currentCart) => currentCart.filter((item) => item.id !== productId));
     toast.info('Product removed from cart!', {
-      position: "bottom-right",
+      position: 'bottom-right',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -70,12 +71,12 @@ function App() {
 
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return;
-    
-    setCart(cart.map(item => 
-      item.id === productId 
-        ? { ...item, quantity: newQuantity } 
-        : item
-    ));
+
+    setCart((currentCart) =>
+      currentCart.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
   };
 
   const clearCart = () => {
@@ -117,7 +118,7 @@ function App() {
                   products={products}
                   categories={categories}
                   searchTerm={searchTerm}
-                  addToCart={addToCart} // ← This was missing!
+                  addToCart={addToCart}
                 />
               } 
             />

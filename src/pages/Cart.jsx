@@ -1,7 +1,6 @@
-// pages/Cart.jsx
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaMinus, FaTrash, FaArrowRight, FaShoppingBag } from 'react-icons/fa';
+import { formatInrPrice } from '../utils';
 
 const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
   if (cart.length === 0) {
@@ -45,7 +44,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
                   <div className="ml-4 flex-grow">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
                     <p className="text-gray-500 text-sm mt-1">{item.category}</p>
-                    <p className="text-lg font-bold mt-2 text-gray-900">₹{item.price}</p>
+                    <p className="text-lg font-bold mt-2 text-gray-900">{formatInrPrice(item.price)}</p>
                   </div>
                   
                   <div className="flex flex-col items-end justify-between">
@@ -93,7 +92,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
               {cart.map(item => (
                 <div key={item.id} className="flex justify-between text-sm">
                   <span className="text-gray-600">{item.name} x {item.quantity}</span>
-                  <span className="text-gray-900 font-medium">₹{(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="text-gray-900 font-medium">{formatInrPrice(item.price * item.quantity)}</span>
                 </div>
               ))}
             </div>
@@ -101,7 +100,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
             <div className="border-t border-gray-200 pt-4 mb-6">
               <div className="flex justify-between font-semibold text-lg">
                 <span className="text-gray-900">Total</span>
-                <span className="text-gray-900">₹{getCartTotal().toFixed(2)}</span>
+                <span className="text-gray-900">{formatInrPrice(getCartTotal())}</span>
               </div>
             </div>
             

@@ -1,11 +1,23 @@
-// components/Header.jsx (updated)
-import React, { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaSearch, FaHome, FaShoppingBag, FaUser, FaHeart, FaTimes, FaEdit, FaSignOutAlt, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHistory } from 'react-icons/fa';
+import {
+  FaEdit,
+  FaEnvelope,
+  FaHeart,
+  FaHome,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaSearch,
+  FaShoppingBag,
+  FaShoppingCart,
+  FaSignOutAlt,
+  FaTimes,
+  FaUser,
+} from 'react-icons/fa';
 
 const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userData, setUserData] = useState({
+  const userData = useMemo(() => ({
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567",
@@ -13,7 +25,7 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
     joinDate: "January 2023",
     orders: 12,
     wishlist: 8
-  });
+  }), []);
 
   const handleLogout = () => {
     console.log("User logged out");
@@ -71,6 +83,7 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
               </Link>
               
               <button 
+                type="button"
                 onClick={() => setIsModalOpen(true)}
                 className="flex flex-col items-center text-gray-300 hover:text-white transition-colors"
               >
@@ -82,7 +95,6 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
         </div>
       </header>
 
-      {/* User Account Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in">
@@ -91,6 +103,7 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
               <h2 className="text-2xl font-bold">My Account</h2>
               <p className="text-gray-300 mt-1">Manage your account details</p>
               <button 
+                type="button"
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
               >
@@ -98,7 +111,6 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
               </button>
             </div>
             
-            {/* User Profile Section */}
             <div className="p-6">
               <div className="flex items-center mb-6">
                 <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
@@ -110,7 +122,6 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
                 </div>
               </div>
               
-              {/* User Details */}
               <div className="space-y-4 mb-6">
                 <div className="flex items-center">
                   <div className="bg-gray-100 p-3 rounded-full mr-3">
@@ -143,7 +154,6 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
                 </div>
               </div>
               
-              {/* Stats */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
                   <p className="text-2xl font-bold text-black">{userData.orders}</p>
@@ -155,13 +165,13 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
                 </div>
               </div>
               
-              {/* Action Buttons */}
               <div className="flex space-x-3">
-                <button className="flex items-center justify-center bg-black text-white py-3 px-4 rounded-lg flex-1 hover:bg-gray-800 transition-colors">
+                <button type="button" className="flex items-center justify-center bg-black text-white py-3 px-4 rounded-lg flex-1 hover:bg-gray-800 transition-colors">
                   <FaEdit className="mr-2" />
                   Edit Profile
                 </button>
                 <button 
+                  type="button"
                   onClick={handleLogout}
                   className="flex items-center justify-center border border-gray-300 text-gray-700 py-3 px-4 rounded-lg flex-1 hover:bg-gray-100 transition-colors"
                 >
@@ -173,16 +183,6 @@ const Header = ({ cartItemsCount, searchTerm, setSearchTerm }) => {
           </div>
         </div>
       )}
-      
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-out forwards;
-        }
-      `}</style>
     </>
   );
 };

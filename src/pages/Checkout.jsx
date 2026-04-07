@@ -1,7 +1,7 @@
-// pages/Checkout.jsx
-import React, { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaArrowLeft, FaLock, FaCreditCard, FaUser, FaMapMarkerAlt } from 'react-icons/fa';
+import { formatInrPrice } from '../utils';
 
 const Checkout = ({ cart, getCartTotal, clearCart }) => {
   const navigate = useNavigate();
@@ -19,6 +19,13 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
     cardExpiry: '',
     cardCvv: ''
   });
+  const orderNumber = useMemo(
+    () => Math.floor(100000 + Math.random() * 900000),
+    []
+  );
+  const subtotal = getCartTotal();
+  const tax = subtotal * 0.08;
+  const total = subtotal + tax;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +52,7 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">Order Successful!</h2>
           <p className="text-gray-600 mb-6">
-            Thank you for your order. Your order number is #{Math.floor(Math.random() * 1000000)}.
+            Thank you for your order. Your order number is #{orderNumber}.
             You will receive an email confirmation shortly.
           </p>
           <button 
@@ -92,22 +99,24 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
           {/* Checkout Form */}
           <div className="lg:w-2/3">
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              {/* Progress Steps */}
               <div className="border-b border-gray-200">
                 <div className="flex">
                   <button 
+                    type="button"
                     className={`flex-1 py-4 text-center font-medium ${activeSection === 'contact' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
                     onClick={() => setActiveSection('contact')}
                   >
                     Contact
                   </button>
                   <button 
+                    type="button"
                     className={`flex-1 py-4 text-center font-medium ${activeSection === 'shipping' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
                     onClick={() => setActiveSection('shipping')}
                   >
                     Shipping
                   </button>
                   <button 
+                    type="button"
                     className={`flex-1 py-4 text-center font-medium ${activeSection === 'payment' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
                     onClick={() => setActiveSection('payment')}
                   >
@@ -117,7 +126,6 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
               </div>
 
               <form onSubmit={handleSubmit} className="p-6">
-                {/* Contact Information */}
                 <div className={`mb-8 ${activeSection !== 'contact' && 'hidden'}`}>
                   <div className="flex items-center mb-6">
                     <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center mr-3">
@@ -136,7 +144,6 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
                   />
                 </div>
 
-                {/* Shipping Address */}
                 <div className={`mb-8 ${activeSection !== 'shipping' && 'hidden'}`}>
                   <div className="flex items-center mb-6">
                     <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center mr-3">
@@ -204,7 +211,6 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
                   </div>
                 </div>
 
-                {/* Payment Information */}
                 <div className={`mb-8 ${activeSection !== 'payment' && 'hidden'}`}>
                   <div className="flex items-center mb-6">
                     <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center mr-3">
@@ -298,7 +304,7 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
                         <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                       </div>
                     </div>
-                    <span className="font-medium text-gray-900">₹{(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-medium text-gray-900">{formatInrPrice(item.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
@@ -306,19 +312,19 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
               <div className="space-y-3 pt-4 border-t border-gray-200">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="text-gray-900">₹{getCartTotal().toFixed(2)}</span>
+                  <span className="text-gray-900">{formatInrPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
-                  <span className="text-gray-900">₹0.00</span>
+                  <span className="text-gray-900">{formatInrPrice(0)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tax</span>
-                  <span className="text-gray-900">₹{(getCartTotal() * 0.08).toFixed(2)}</span>
+                  <span className="text-gray-900">{formatInrPrice(tax)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg pt-3 border-t border-gray-200">
                   <span className="text-black">Total</span>
-                  <span className="text-black">₹{(getCartTotal() * 1.08).toFixed(2)}</span>
+                  <span className="text-black">{formatInrPrice(total)}</span>
                 </div>
               </div>
             </div>

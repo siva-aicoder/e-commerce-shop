@@ -1,7 +1,6 @@
-// pages/Home.jsx
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
+import { formatInrPrice } from '../utils';
 
 const Home = ({ categories, featuredProducts }) => {
   return (
@@ -20,16 +19,9 @@ const Home = ({ categories, featuredProducts }) => {
         </div>
       </section>
 
-      {/* Categories Section - EVEN MORE COMPACT */}
       <section className="px-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-black">Shop by Category</h2>
-          {/* <Link 
-            to="/categories" 
-            className="text-black text-sm flex items-center hover:text-gray-700 transition-colors"
-          >
-            View All <FaArrowRight className="ml-1" size={12} />
-          </Link> */}
         </div>
         <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
           {categories.map(category => (
@@ -76,13 +68,13 @@ const Home = ({ categories, featuredProducts }) => {
                         className={i < product.rating ? "text-yellow-500" : "text-gray-300"} 
                         size={14} 
                       />
-                    ))}
-                    <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-black">₹{product.price}</span>
+                  ))}
+                  <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
+                </div>
+                <div className="flex justify-between items-center">
+                    <span className="text-lg font-bold text-black">{formatInrPrice(product.price)}</span>
                     {product.oldPrice && (
-                      <span className="text-sm text-gray-500 line-through">₹{product.oldPrice}</span>
+                      <span className="text-sm text-gray-500 line-through">{formatInrPrice(product.oldPrice)}</span>
                     )}
                   </div>
                 </div>

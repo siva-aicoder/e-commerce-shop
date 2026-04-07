@@ -1,13 +1,14 @@
-// pages/ProductDetail.jsx
-import React, { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaHeart, FaShoppingCart, FaArrowLeft } from 'react-icons/fa';
-import products from '../data/mockData';
+import { products } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
+import { formatInrPrice } from '../utils';
 
 const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
-  const product = products.find(p => p.id === parseInt(id));
+  const productId = Number.parseInt(id, 10);
+  const product = products.find((item) => item.id === productId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
@@ -43,12 +44,11 @@ const ProductDetail = ({ addToCart }) => {
 
   // Find related products (same category, excluding current product)
   const relatedProducts = products
-    .filter(p => p.category === product.category && p.id !== product.id)
+    .filter((item) => item.category === product.category && item.id !== product.id)
     .slice(0, 4);
 
   return (
     <div className="space-y-12 bg-gray-50 p-4 min-h-screen">
-      {/* Breadcrumb */}
       <nav className="text-sm text-gray-500">
         <Link to="/" className="hover:text-black transition-colors">Home</Link> / 
         <Link to="/products" className="hover:text-black transition-colors ml-1">Products</Link> / 
@@ -56,9 +56,7 @@ const ProductDetail = ({ addToCart }) => {
         <span className="ml-1 text-black">{product.name}</span>
       </nav>
 
-      {/* Product Details */}
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Product Image with Zoom */}
         <div className="md:w-1/2">
           <div 
             className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 relative"
@@ -88,10 +86,8 @@ const ProductDetail = ({ addToCart }) => {
               />
             )}
           </div>
-          {/* <p className="text-sm text-gray-500 mt-2 text-center">Hover over image to zoom</p> */}
         </div>
 
-        {/* Product Info */}
         <div className="md:w-1/2">
           <Link to="/products" className="inline-flex items-center text-gray-600 mb-4 hover:text-black transition-colors">
             <FaArrowLeft className="mr-2" /> Back to products
@@ -112,14 +108,14 @@ const ProductDetail = ({ addToCart }) => {
           <div className="mb-6">
             {product.oldPrice ? (
               <div className="flex items-center">
-                <span className="text-3xl font-bold text-black">₹{product.price}</span>
-                <span className="text-xl text-gray-500 line-through ml-2">₹{product.oldPrice}</span>
+                <span className="text-3xl font-bold text-black">{formatInrPrice(product.price)}</span>
+                <span className="text-xl text-gray-500 line-through ml-2">{formatInrPrice(product.oldPrice)}</span>
                 <span className="ml-4 bg-gray-200 text-black px-2 py-1 rounded text-sm">
                   {Math.round((1 - product.price / product.oldPrice) * 100)}% OFF
                 </span>
               </div>
             ) : (
-              <span className="text-3xl font-bold text-black">₹{product.price}</span>
+              <span className="text-3xl font-bold text-black">{formatInrPrice(product.price)}</span>
             )}
           </div>
 
@@ -149,7 +145,6 @@ const ProductDetail = ({ addToCart }) => {
         </div>
       </div>
 
-      {/* Related Products */}
       {relatedProducts.length > 0 && (
         <section>
           <h2 className="text-2xl font-bold mb-6 text-black">Related Products</h2>
