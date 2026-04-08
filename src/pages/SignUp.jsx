@@ -6,7 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import { getErrorMessage } from '../api/apiClient';
-import Loader from '../components/Header';
+import Loader from '../components/Loader';
 import { FiUser, FiMail, FiLock } from 'react-icons/fi';
 import { authAPI } from '../api/endPoints';
 
