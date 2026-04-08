@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaMinus, FaTrash, FaArrowRight, FaShoppingBag } from 'react-icons/fa';
+import { normalizeCategoryName } from '../utils/categories';
 
 const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
   if (cart.length === 0) {
@@ -44,7 +45,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
                   
                   <div className="ml-4 flex-grow">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-gray-500 text-sm mt-1">{item.category}</p>
+                    <p className="text-gray-500 text-sm mt-1">{normalizeCategoryName(item.category)}</p>
                     <p className="text-lg font-bold mt-2 text-gray-900">₹{item.price}</p>
                   </div>
                   

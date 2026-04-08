@@ -15,6 +15,7 @@ import Checkout from './pages/Checkout';
 
 // Mock data
 import { categories, products } from './data/mockData';
+import { normalizeCategoryName } from './utils/categories';
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -24,7 +25,13 @@ function App() {
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      const parsedCart = JSON.parse(savedCart);
+      setCart(
+        parsedCart.map((item) => ({
+          ...item,
+          category: normalizeCategoryName(item.category),
+        }))
+      );
     }
   }, []);
 

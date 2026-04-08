@@ -2,12 +2,14 @@
 import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaHeart, FaShoppingCart, FaArrowLeft } from 'react-icons/fa';
-import products from '../data/mockData';
+import { products } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
+import { normalizeCategoryName } from '../utils/categories';
 
 const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
   const product = products.find(p => p.id === parseInt(id));
+  const normalizedCategory = product ? normalizeCategoryName(product.category) : '';
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
@@ -43,7 +45,10 @@ const ProductDetail = ({ addToCart }) => {
 
   // Find related products (same category, excluding current product)
   const relatedProducts = products
-    .filter(p => p.category === product.category && p.id !== product.id)
+    .filter(
+      (p) =>
+        normalizeCategoryName(p.category) === normalizedCategory && p.id !== product.id
+    )
     .slice(0, 4);
 
   return (
@@ -52,7 +57,7 @@ const ProductDetail = ({ addToCart }) => {
       <nav className="text-sm text-gray-500">
         <Link to="/" className="hover:text-black transition-colors">Home</Link> / 
         <Link to="/products" className="hover:text-black transition-colors ml-1">Products</Link> / 
-        <Link to={`/products/${product.category}`} className="hover:text-black transition-colors ml-1">{product.category}</Link> / 
+        <Link to={`/products/${normalizedCategory}`} className="hover:text-black transition-colors ml-1">{normalizedCategory}</Link> / 
         <span className="ml-1 text-black">{product.name}</span>
       </nav>
 

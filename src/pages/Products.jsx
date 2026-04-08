@@ -1,15 +1,23 @@
 // pages/Products.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { FaFilter, FaTimes } from 'react-icons/fa';
+import { normalizeCategoryName } from '../utils/categories';
 
 const Products = ({ products, categories, searchTerm, addToCart }) => {
   const { category } = useParams();
+  const normalizedRouteCategory = normalizeCategoryName(category);
+  const maxProductPrice = useMemo(
+    () => products.reduce((highestPrice, product) => Math.max(highestPrice, product.price), 0),
+    [products]
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState(category ? [category] : []);
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [selectedCategories, setSelectedCategories] = useState(
+    normalizedRouteCategory ? [normalizedRouteCategory] : []
+  );
+  const [priceRange, setPriceRange] = useState([0, maxProductPrice]);
   const [sortBy, setSortBy] = useState('featured');
   
   const productsPerPage = 12;
@@ -29,7 +37,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
     // Filter by category
     if (selectedCategories.length > 0) {
       result = result.filter(product => 
-        selectedCategories.includes(product.category)
+        selectedCategories.includes(normalizeCategoryName(product.category))
       );
     }
     
@@ -56,6 +64,15 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
     
     return result;
   }, [products, searchTerm, selectedCategories, priceRange, sortBy]);
+
+  useEffect(() => {
+    setSelectedCategories(normalizedRouteCategory ? [normalizedRouteCategory] : []);
+    setCurrentPage(1);
+  }, [normalizedRouteCategory]);
+
+  useEffect(() => {
+    setPriceRange([0, maxProductPrice]);
+  }, [maxProductPrice]);
 
   // Get current products for pagination
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -134,7 +151,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <input
               type="range"
               min="0"
-              max="1000"
+              max={maxProductPrice}
               value={priceRange[0]}
               onChange={(e) => handlePriceRangeChange(e, 0)}
               className="w-full accent-black"
@@ -142,7 +159,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <input
               type="range"
               min="0"
-              max="1000"
+              max={maxProductPrice}
               value={priceRange[1]}
               onChange={(e) => handlePriceRangeChange(e, 1)}
               className="w-full accent-black"
@@ -168,8 +185,8 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
         {/* Clear Filters Button */}
         <button 
           onClick={() => {
-            setSelectedCategories(category ? [category] : []);
-            setPriceRange([0, 1000]);
+            setSelectedCategories(normalizedRouteCategory ? [normalizedRouteCategory] : []);
+            setPriceRange([0, maxProductPrice]);
             setSortBy('featured');
           }}
           className="w-full mt-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
@@ -182,7 +199,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
       <div className="md:w-3/4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-black">
-            {category ? `${category} Products` : 'All Products'}
+            {normalizedRouteCategory ? `${normalizedRouteCategory} Products` : 'All Products'}
             <span className="text-gray-500 text-lg ml-2">({filteredProducts.length} products)</span>
           </h2>
           <button 
@@ -246,8 +263,8 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <p className="text-gray-500">Try adjusting your filters or search term</p>
             <button 
               onClick={() => {
-                setSelectedCategories(category ? [category] : []);
-                setPriceRange([0, 1000]);
+                setSelectedCategories(normalizedRouteCategory ? [normalizedRouteCategory] : []);
+                setPriceRange([0, maxProductPrice]);
                 setSortBy('featured');
               }}
               className="mt-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
