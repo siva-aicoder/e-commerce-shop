@@ -1,14 +1,23 @@
 // data/mockData.js
 // Sample product data
-export const categories = [
-  { id: 1, name: 'Electronics', icon: '📱', productCount: 3 },
-  { id: 2, name: 'Clothing', icon: '👕', productCount: 3},
-  { id: 3, name: 'Home & Kitchen', icon: '🏠', productCount: 2},
-  { id: 4, name: 'Books', icon: '📚', productCount: 2},
-  { id: 5, name: 'Beauty', icon: '💄', productCount: 1},
-  { id: 6, name: 'Sports', icon: '⚽', productCount: 2},
-  { id: 7, name: 'Toys', icon: '🧸', productCount: 2 },
- 
+export const CATEGORY_NAMES = {
+  electronics: 'Electronics',
+  clothing: 'Clothing',
+  homeAndKitchen: 'Home & Kitchen',
+  books: 'Books',
+  beauty: 'Beauty',
+  sports: 'Sports',
+  kids: 'Kids',
+};
+
+const CATEGORY_DEFINITIONS = [
+  { id: 1, key: 'electronics', icon: '📱' },
+  { id: 2, key: 'clothing', icon: '👕' },
+  { id: 3, key: 'homeAndKitchen', icon: '🏠' },
+  { id: 4, key: 'books', icon: '📚' },
+  { id: 5, key: 'beauty', icon: '💄' },
+  { id: 6, key: 'sports', icon: '⚽' },
+  { id: 7, key: 'kids', icon: '🧸' },
 ];
 
 export const products = [
@@ -17,7 +26,7 @@ export const products = [
     name: 'SAMSUNG Galaxy S21',
     price: 80000,
     oldPrice: 100000,
-    category: 'Electronics',
+    category: CATEGORY_NAMES.electronics,
     rating: 4.5,
     reviewCount: 124,
     image: 'https://tse4.mm.bing.net/th/id/OIP.-W4bPBDccEpoaai5WTUJagHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
@@ -34,7 +43,7 @@ export const products = [
     name: 'SONY HEADSET',
     price: 20000,
     oldPrice: 22000,
-    category: 'Electronics',
+    category: CATEGORY_NAMES.electronics,
     rating: 4.3,
     reviewCount: 87,
     image: 'https://sony.scene7.com/is/image/sonyglobalsolutions/Headphones-primary%20tout-mobile-1534x1083?$toutMobile$&fmt=png-alpha',
@@ -51,7 +60,7 @@ export const products = [
     name: 'Cotton T-Shirt',
     price: 700,
     oldPrice: 1000,
-    category: 'Clothing',
+    category: CATEGORY_NAMES.clothing,
     rating: 4.2,
     reviewCount: 56,
     image: 'https://cdn.mockupnest.com/wp-content/uploads/edd/2025/01/03-Free-Floating-Oversized-T-Shirt-Mockup.jpg',
@@ -68,7 +77,7 @@ export const products = [
     name: 'Coffee Maker',
     price: 6000,
     oldPrice: 9000,
-    category: 'Home & Kitchen',
+    category: CATEGORY_NAMES.homeAndKitchen,
     rating: 4.7,
     reviewCount: 203,
     image: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/dfd29772301861.641ecbe31c937.jpg',
@@ -85,7 +94,7 @@ export const products = [
     name: 'Best Selling Novel',
     price: 899,
     oldPrice: 999,
-    category: 'Books',
+    category: CATEGORY_NAMES.books,
     rating: 4.8,
     reviewCount: 312,
     image: 'https://tse4.mm.bing.net/th/id/OIP.OWox8KxSP-JnN2_plaKGEgHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
@@ -102,7 +111,7 @@ export const products = [
     name: 'Face Moisturizer',
     price: 1500,
     oldPrice: 2000,
-    category: 'Beauty',
+    category: CATEGORY_NAMES.beauty,
     rating: 4.4,
     reviewCount: 98,
     image: 'https://m.media-amazon.com/images/I/515zn9w7MyL._SL1500_.jpg',
@@ -119,7 +128,7 @@ export const products = [
     name: 'Yoga Mat',
     price: 999,
     oldPrice: 1299,
-    category: 'Sports',
+    category: CATEGORY_NAMES.sports,
     rating: 4.6,
     reviewCount: 167,
     image: 'https://png.pngtree.com/thumb_back/fw800/background/20230525/pngtree-colorful-yoga-mats-image_2619221.jpg',
@@ -136,7 +145,7 @@ export const products = [
     name: 'Building Blocks Set',
     price: 499,
     oldPrice: 999,
-    category: 'Toys',
+    category: CATEGORY_NAMES.kids,
     rating: 4.9,
     reviewCount: 231,
     image: 'https://m.media-amazon.com/images/I/81D9vyIHXbL.jpg',
@@ -153,7 +162,7 @@ export const products = [
     name: 'Car Toy',
     price: 2999,
     oldPrice: 3999,
-    category: 'Toys',
+    category: CATEGORY_NAMES.kids,
     rating: 4.5,
     reviewCount: 76,
     image: 'https://coolwallpapers.me/picsup/3032183-toy-car_volkswagen_volkswagen-beetle.jpg',
@@ -170,7 +179,7 @@ export const products = [
     name: 'FASTTRACK SMART Watch',
     price: 1999,
     oldPrice: 2499,
-    category: 'Electronics',
+    category: CATEGORY_NAMES.electronics,
     rating: 4.6,
     reviewCount: 189,
     image: 'https://wallpaperaccess.com/full/3021129.jpg',
@@ -187,7 +196,7 @@ export const products = [
     name: 'Running Shoes',
     price: 4999,
     oldPrice: 6999,
-    category: 'Sports',
+    category: CATEGORY_NAMES.sports,
     rating: 4.7,
     reviewCount: 214,
     image: 'https://wallpapercrafter.com/desktop/287561-running-shoe-shoe-asics-highly-functional-run.jpg',
@@ -204,7 +213,7 @@ export const products = [
     name: 'Blender',
     price: 1999,
     oldPrice: 2999,
-    category: 'Home & Kitchen',
+    category: CATEGORY_NAMES.homeAndKitchen,
     rating: 4.3,
     reviewCount: 92,
     image: 'https://www.stayathomemum.com.au/wp-content/uploads/2023/01/home-blender-3.jpg',
@@ -221,7 +230,7 @@ export const products = [
     name: 'SHIRT',
     price: 1499,
     oldPrice: 1799,
-    category: 'Clothing',
+    category: CATEGORY_NAMES.clothing,
     rating: 4.2,
     reviewCount: 56,
     image: 'https://diners.com.pk/cdn/shop/products/AD-30103-L-PURPLE-RS-3290-01.jpg?v=1686071654',
@@ -238,7 +247,7 @@ export const products = [
     name: 'TROUSER',
     price: 2999,
     oldPrice: 3999,
-    category: 'Clothing',
+    category: CATEGORY_NAMES.clothing,
     rating: 4.2,
     reviewCount: 56,
     image: 'https://wallpapercrafter.com/desktop8/1922629-blue-jeans-denim-denim-jeans-denim-pants-folded.jpg',
@@ -255,7 +264,7 @@ export const products = [
     name: 'Novel',
     price: 499,
     oldPrice: 699,
-    category: 'Books',
+    category: CATEGORY_NAMES.books,
     rating: 4.8,
     reviewCount: 312,
     image: 'https://tse2.mm.bing.net/th/id/OIP.RMHyaUfHBg6GIyWpWdYHTgHaEo?rs=1&pid=ImgDetMain&o=7&rm=3',
@@ -269,5 +278,12 @@ export const products = [
   }
 
 ];
+
+export const categories = CATEGORY_DEFINITIONS.map(({ id, key, icon }) => ({
+  id,
+  name: CATEGORY_NAMES[key],
+  icon,
+  productCount: products.filter((product) => product.category === CATEGORY_NAMES[key]).length,
+}));
 
 export default products;
