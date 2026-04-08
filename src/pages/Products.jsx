@@ -1,22 +1,45 @@
 // pages/Products.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { FaFilter, FaTimes } from 'react-icons/fa';
 
 const Products = ({ products, categories, searchTerm, addToCart }) => {
   const { category } = useParams();
+  const maxProductPrice = useMemo(
+    () => products.reduce((maxPrice, product) => Math.max(maxPrice, product.price), 0),
+    [products]
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState(category ? [category] : []);
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [priceRange, setPriceRange] = useState([0, maxProductPrice]);
   const [sortBy, setSortBy] = useState('featured');
   
   const productsPerPage = 12;
 
+  useEffect(() => {
+    setSelectedCategories(category ? [category] : []);
+    setCurrentPage(1);
+  }, [category]);
+
+  useEffect(() => {
+    setPriceRange(([minPrice, maxPrice]) => [
+      Math.min(minPrice, maxProductPrice),
+      maxPrice === 0 ? maxProductPrice : Math.min(maxPrice, maxProductPrice),
+    ]);
+  }, [maxProductPrice]);
+
+  const resetFilters = () => {
+    setSelectedCategories(category ? [category] : []);
+    setPriceRange([0, maxProductPrice]);
+    setSortBy('featured');
+    setCurrentPage(1);
+  };
+
   // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let result = products;
+    let result = [...products];
     
     // Filter by search term
     if (searchTerm) {
@@ -134,7 +157,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <input
               type="range"
               min="0"
-              max="1000"
+              max={maxProductPrice}
               value={priceRange[0]}
               onChange={(e) => handlePriceRangeChange(e, 0)}
               className="w-full accent-black"
@@ -142,7 +165,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <input
               type="range"
               min="0"
-              max="1000"
+              max={maxProductPrice}
               value={priceRange[1]}
               onChange={(e) => handlePriceRangeChange(e, 1)}
               className="w-full accent-black"
@@ -167,11 +190,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
         
         {/* Clear Filters Button */}
         <button 
-          onClick={() => {
-            setSelectedCategories(category ? [category] : []);
-            setPriceRange([0, 1000]);
-            setSortBy('featured');
-          }}
+          onClick={resetFilters}
           className="w-full mt-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           Clear Filters
@@ -245,11 +264,7 @@ const Products = ({ products, categories, searchTerm, addToCart }) => {
             <h3 className="text-xl font-semibold text-black">No products found</h3>
             <p className="text-gray-500">Try adjusting your filters or search term</p>
             <button 
-              onClick={() => {
-                setSelectedCategories(category ? [category] : []);
-                setPriceRange([0, 1000]);
-                setSortBy('featured');
-              }}
+              onClick={resetFilters}
               className="mt-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
               Clear All Filters

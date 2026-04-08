@@ -8,7 +8,7 @@ export const categories = [
   { id: 5, name: 'Beauty', icon: '💄', productCount: 1},
   { id: 6, name: 'Sports', icon: '⚽', productCount: 2},
   { id: 7, name: 'Toys', icon: '🧸', productCount: 2 },
- 
+  { id: 8, name: 'Medicine', icon: '💊', productCount: 1 },
 ];
 
 export const products = [
@@ -265,6 +265,23 @@ export const products = [
       color: 'Various',
       dimensions: '8 x 5.2 x 1.2 inches',
       weight: '12 oz'
+    }
+  },
+  {
+    id: 16,
+    name: 'Daily Multivitamin Tablets',
+    price: 649,
+    oldPrice: 799,
+    category: 'Medicine',
+    rating: 4.6,
+    reviewCount: 142,
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=80',
+    description: 'Daily multivitamin tablets formulated to support immunity, energy, and overall wellness.',
+    details: {
+      material: 'Tablet',
+      color: 'White',
+      dimensions: '60 tablets',
+      weight: '120 g'
     }
   }
 
