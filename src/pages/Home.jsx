@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
+import { formatINR, getBasePrice, getSalePrice, hasActiveSale } from '../utils/pricing';
 
 const Home = ({ categories, featuredProducts }) => {
   return (
@@ -80,9 +81,9 @@ const Home = ({ categories, featuredProducts }) => {
                     <span className="text-xs text-gray-500 ml-1">({product.reviewCount})</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-black">₹{product.price}</span>
-                    {product.oldPrice && (
-                      <span className="text-sm text-gray-500 line-through">₹{product.oldPrice}</span>
+                    <span className="text-lg font-bold text-black">₹{formatINR(getSalePrice(product))}</span>
+                    {hasActiveSale(product) && (
+                      <span className="text-sm text-gray-500 line-through">₹{formatINR(getBasePrice(product))}</span>
                     )}
                   </div>
                 </div>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaMinus, FaTrash, FaArrowRight, FaShoppingBag } from 'react-icons/fa';
+import { formatINR, getSalePrice } from '../utils/pricing';
 
 const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
   if (cart.length === 0) {
@@ -45,7 +46,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
                   <div className="ml-4 flex-grow">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
                     <p className="text-gray-500 text-sm mt-1">{item.category}</p>
-                    <p className="text-lg font-bold mt-2 text-gray-900">₹{item.price}</p>
+                    <p className="text-lg font-bold mt-2 text-gray-900">₹{formatINR(getSalePrice(item))}</p>
                   </div>
                   
                   <div className="flex flex-col items-end justify-between">
@@ -93,7 +94,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, getCartTotal }) => {
               {cart.map(item => (
                 <div key={item.id} className="flex justify-between text-sm">
                   <span className="text-gray-600">{item.name} x {item.quantity}</span>
-                  <span className="text-gray-900 font-medium">₹{(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="text-gray-900 font-medium">₹{(getSalePrice(item) * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>

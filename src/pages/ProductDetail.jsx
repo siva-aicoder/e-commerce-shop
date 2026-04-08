@@ -2,12 +2,15 @@
 import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaHeart, FaShoppingCart, FaArrowLeft } from 'react-icons/fa';
-import products from '../data/mockData';
+import { products } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
+import { formatINR, getBasePrice, getDiscountPercentage, getSalePrice, hasActiveSale } from '../utils/pricing';
 
 const ProductDetail = ({ addToCart }) => {
   const { id } = useParams();
   const product = products.find(p => p.id === parseInt(id));
+  const displayPrice = product ? getSalePrice(product) : 0;
+  const originalPrice = product ? getBasePrice(product) : 0;
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
@@ -110,16 +113,16 @@ const ProductDetail = ({ addToCart }) => {
           </div>
 
           <div className="mb-6">
-            {product.oldPrice ? (
+            {hasActiveSale(product) ? (
               <div className="flex items-center">
-                <span className="text-3xl font-bold text-black">₹{product.price}</span>
-                <span className="text-xl text-gray-500 line-through ml-2">₹{product.oldPrice}</span>
+                <span className="text-3xl font-bold text-black">₹{formatINR(displayPrice)}</span>
+                <span className="text-xl text-gray-500 line-through ml-2">₹{formatINR(originalPrice)}</span>
                 <span className="ml-4 bg-gray-200 text-black px-2 py-1 rounded text-sm">
-                  {Math.round((1 - product.price / product.oldPrice) * 100)}% OFF
+                  {getDiscountPercentage(product)}% OFF
                 </span>
               </div>
             ) : (
-              <span className="text-3xl font-bold text-black">₹{product.price}</span>
+              <span className="text-3xl font-bold text-black">₹{formatINR(displayPrice)}</span>
             )}
           </div>
 

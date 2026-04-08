@@ -15,6 +15,7 @@ import Checkout from './pages/Checkout';
 
 // Mock data
 import { categories, products } from './data/mockData';
+import { getBasePrice, getSalePrice } from './utils/pricing';
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -43,7 +44,16 @@ function App() {
           : item
       ));
     } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+      setCart([
+        ...cart,
+        {
+          ...product,
+          price: getSalePrice(product),
+          salePrice: getSalePrice(product),
+          basePrice: getBasePrice(product),
+          quantity: 1
+        }
+      ]);
     }
     
     toast.success('Product added to cart!', {
@@ -83,7 +93,7 @@ function App() {
   };
 
   const getCartTotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cart.reduce((total, item) => total + (getSalePrice(item) * item.quantity), 0);
   };
 
   const getCartItemsCount = () => {

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaArrowLeft, FaLock, FaCreditCard, FaUser, FaMapMarkerAlt } from 'react-icons/fa';
+import { getSalePrice } from '../utils/pricing';
 
 const Checkout = ({ cart, getCartTotal, clearCart }) => {
   const navigate = useNavigate();
@@ -298,7 +299,7 @@ const Checkout = ({ cart, getCartTotal, clearCart }) => {
                         <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                       </div>
                     </div>
-                    <span className="font-medium text-gray-900">₹{(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-medium text-gray-900">₹{(getSalePrice(item) * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingBag, FaArrowLeft, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { getSalePrice } from '../utils/pricing';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -91,7 +92,7 @@ const Orders = () => {
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
                   </div>
-                  <span className="font-medium text-black">₹{(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="font-medium text-black">₹{(getSalePrice(item) * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>

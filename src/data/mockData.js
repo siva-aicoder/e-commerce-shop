@@ -16,6 +16,8 @@ export const products = [
     id: 1,
     name: 'SAMSUNG Galaxy S21',
     price: 80000,
+    salePrice: 80000,
+    basePrice: 100000,
     oldPrice: 100000,
     category: 'Electronics',
     rating: 4.5,
